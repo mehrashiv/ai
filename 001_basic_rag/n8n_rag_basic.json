@@ -4,9 +4,9 @@
     {
       "parameters": {
         "public": true,
-        "initialMessages": "Hi there! 👋\nMy name is Nathan. I can assist you with technical questions regarding Nile.",
+        "initialMessages": "Hi there! 👋\nMy name is Nathan. I can assist you with technical questions regarding your knowledge base.",
         "options": {
-          "title": "Nile Tech Pubs Support"
+          "title": "Tech Pubs Support"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.chatTrigger",
@@ -22,7 +22,7 @@
     {
       "parameters": {
         "options": {
-          "systemMessage": "You are an expert in Nile. When a user asks for questions, you need to use the Supabase Vector Store to answer all questions. Do not answer any question that are not in the store. For questions that are outside of the Store inform the user \"Apologies, I cannot assist you with this question\""
+          "systemMessage": "You are an expert in ACME Incs products. When a user asks for questions, you need to use the Supabase Vector Store to answer all questions. Do not answer any question that are not in the store. For questions that are outside of the Store inform the user \"Apologies, I cannot assist you with this question\""
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -54,7 +54,7 @@
     {
       "parameters": {
         "mode": "retrieve-as-tool",
-        "toolDescription": "You are Nile Secure Expert Engineer who has deep knowledge base of articles",
+        "toolDescription": "You are ACME Inc Expert Engineer who has deep knowledge base of articles",
         "tableName": {
           "__rl": true,
           "value": "documents",
