@@ -1,0 +1,461 @@
+{
+  "name": "RAG Starter",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nMy name is Nathan. I can assist you with technical questions regarding Nile.",
+        "options": {
+          "title": "Nile Tech Pubs Support"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -960,
+        -96
+      ],
+      "id": "d3ee580f-4332-4147-8e73-f52ece9538ca",
+      "name": "When chat message received",
+      "webhookId": "9a13192c-5e5e-4e39-998a-49a3ea9d4e58"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are an expert in Nile. When a user asks for questions, you need to use the Supabase Vector Store to answer all questions. Do not answer any question that are not in the store. For questions that are outside of the Store inform the user \"Apologies, I cannot assist you with this question\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -704,
+        -96
+      ],
+      "id": "d584878a-513b-4d91-b44f-ba7915d893f5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -608,
+        144
+      ],
+      "id": "383191e7-cd53-4b16-a835-6347b54154fa",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "NTe9c7lE6MNudPp1",
+          "name": "PostgresMemory"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "You are Nile Secure Expert Engineer who has deep knowledge base of articles",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "topK": 20,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -464,
+        128
+      ],
+      "id": "3375d04e-22ca-401d-9a2e-f540777ca6e6",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "yt9OcAQKGJRq491g",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "12Kef2KB2eKE0A2ZOVsRI0UEDrrWR3s82",
+          "mode": "list",
+          "cachedResultName": "rag_starter",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/12Kef2KB2eKE0A2ZOVsRI0UEDrrWR3s82"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -912,
+        -640
+      ],
+      "id": "8f3a16b2-037d-48d3-a644-8ca9b4efaedb",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "cGBi6pSN6S0sqtsk",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -64,
+        -640
+      ],
+      "id": "a9e9ff3f-7a51-4fc5-804d-298fb49761fb",
+      "name": "Supabase Vector Store1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "yt9OcAQKGJRq491g",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        -400
+      ],
+      "id": "d83a338f-249e-49c9-af6d-5a19cc396f2a",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "binaryPropertyName": "=data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        -640
+      ],
+      "id": "6416e9d6-19d5-4ee6-814d-0382921e3b24",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -144,
+        -400
+      ],
+      "id": "09df94cd-f39a-4101-824e-596d805a3957",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "ANc3qM00f5m6CkP1",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -464,
+        320
+      ],
+      "id": "59f3ce79-771e-4943-bdaf-fad33e99fd9d",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "ANc3qM00f5m6CkP1",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "12Kef2KB2eKE0A2ZOVsRI0UEDrrWR3s82",
+            "mode": "list",
+            "cachedResultName": "rag_starter",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/12Kef2KB2eKE0A2ZOVsRI0UEDrrWR3s82"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -720,
+        -640
+      ],
+      "id": "fc5917b7-57f0-41f8-a1c1-5e93efe11d02",
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "cGBi6pSN6S0sqtsk",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -512,
+        -640
+      ],
+      "id": "3b5a04c6-112d-45c1-8163-4adec487390c",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "cGBi6pSN6S0sqtsk",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -864,
+        144
+      ],
+      "id": "e0c78a78-981a-4b61-b41c-494b40cf0a24",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "ANc3qM00f5m6CkP1",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Knowledge Base Lookup\n** As a user you can chat with the bot to get answers anything related to the knowledge base",
+        "height": 704,
+        "width": 816,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1008,
+        -240
+      ],
+      "typeVersion": 1,
+      "id": "4e4caf08-e57c-4f26-846c-444fff97741d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Knowledge base document ingestion pipeline \n** As an admin you can upload knowledge base articles to GDrive in markdown format which will automatically trigger ingestion to a vector DB",
+        "height": 480,
+        "width": 1232,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -960,
+        -752
+      ],
+      "typeVersion": 1,
+      "id": "bb62883f-9ec7-400e-882c-30eaf9efffe8",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store1": {
+      "main": [
+        []
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4fe960c1-fd03-4ada-b79b-5857f87a4021",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "60b43bf0834f911bc90f312ea1343e5f62cdfebdb9deaabaade3b1035ed76f3f"
+  },
+  "id": "oD9upX9LDCz7DrnP",
+  "tags": []
+}
