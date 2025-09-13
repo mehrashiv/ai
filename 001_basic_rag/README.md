@@ -1,4 +1,4 @@
-# RAG Starter - Nile Tech Support Chatbot
+# RAG Starter - Tech Support Chatbot
 
 A Retrieval Augmented Generation (RAG) system built with n8n that creates an intelligent chatbot for technical support. The system automatically ingests documentation from Google Drive and provides AI-powered responses using a vector database for context-aware answers.
 
@@ -41,7 +41,7 @@ The system consists of two main workflows:
 ## ⚙️ Key Components
 
 ### AI Agent Configuration
-- **System Message**: Expert Nile knowledge base assistant
+- **System Message**: Expert tecnical knowledge base assistant
 - **Retrieval Mode**: Uses vector store as tool with top-20 results
 - **Response Constraints**: Only answers questions within knowledge base
 - **Fallback**: Polite refusal for out-of-scope questions
