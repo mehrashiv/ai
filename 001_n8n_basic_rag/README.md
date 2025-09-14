@@ -107,20 +107,6 @@ User: "What's the weather like?"
 Bot: "Apologies, I cannot assist you with this question"
 ```
 
-## 🔍 Technical Details
-
-### Embedding Strategy
-- **Model**: OpenAI text-embedding-ada-002
-- **Dimension**: 1536 dimensions
-- **Similarity**: Cosine similarity for retrieval
-- **Top-K**: 20 most relevant documents
-
-### Response Generation
-- **Model**: GPT-4.1 Mini for cost-effectiveness
-- **Context**: Retrieved documents + conversation history
-- **Constraints**: Strict adherence to knowledge base scope
-- **Memory**: Persistent across user sessions
-
 ## 🎯 Learning Outcomes
 
 This project demonstrates:
